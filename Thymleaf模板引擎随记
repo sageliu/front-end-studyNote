@@ -1,0 +1,70 @@
+把数字格式化成带千分符，小数位为2位展示出来
+th:text="${#numbers.formatDecimal(info.actualRiskTaking, 0, 'COMMA',2,'POINT')}"
+其他的展示方式，每一个位置表示什么意思，span还有text属性？
+
+themeleaf千分符展示:
+<span th:text="${#numbers.formatDecimal(info.initialInvestmentTotal, 1, 'COMMA',2,'POINT')}"></span>
+
+
+input的正常展示（防止科学计数法）：
+<input type='text' id="initialInvestmentTotal"    name="initialInvestmentTotal" class="form-control"    th:value="${#numbers.formatDecimal(info.initialInvestmentTotal,1,2)}" />
+
+
+
+日期的themelaf表示
+th:value="${#dates.format(info.principalOverdueDate ,'yyyy-MM-dd')}"
+
+
+
+themeleaf内联：（就是在dom里或者js里使用request session域的变量值）
+文本内联，文本使用el表达式
+<p th:inline="text">Hello, [[${session.user.name}]]!</p>  
+js脚本内联
+<script th:inline="javascript">     
+///*[# th:if="${#httpServletRequest.getParameter('extra')=='error' or #httpServletRequest.getParameter('extra')=='audit'}"]*/
+		$("#errorTab").click();
+		///*[/]*/
+这个写法的语法是啥
+
+
+
+后台session获取role角色
+@RequestMapping("/index")
+	public String indexPage(HttpServletRequest request){
+		LoginUser user = SecurityUtils.getCurrentUser();
+		request.getSession().setAttribute("name", user.getUser().getName());
+		request.getSession().setAttribute("org", user.getCurrentOrg().get().getNamePath().split("\\|")[2]);
+		if(null != user.getRoles()) {
+			request.getSession().setAttribute("role", user.getRoles().get().get(0).getId());
+		}
+		return "index";
+	}
+	
+html里面获取session：
+<input type="hidden" name="role" id="role" th:value="${session.role}"/>
+
+js里面获取session： thymeleaf模板
+<script type="text/javascript" th:inline="javascript">
+	var role = /*[[${session.role}]]*/   //获取session中的值;
+
+
+
+使用thymeleaf等模板编写前端代码时，后端如果使用的是@controller模式  则可以返回指定视图  并且可以给前端传递model数据。酱Model model 写在方法的入参之中， 然后在返回视图名字之前  添加集合名字到model里面：  model.addAttribute("base" , baseInfoList)
+
+
+在js里面使用thymleaf语法，并获取session变量的值
+th:inline="javascript"
+/*[[${session.role}]]*/
+
+
+
+
+Thymeleaf传递给js 方法值
+<a  th:onclick="'javascript:del('+$<a  th:onclick="'javascript:del('+this+','+${user.id}+');'" ></a>{user.id}+');'" ></a>
+
+ th:onclick="'javascript:goAdjust(\''+ ${info.id} + '\');'"
+	
+	
+	
+
+
