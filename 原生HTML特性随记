@@ -1,0 +1,45 @@
+<span>只讲text不讲value,  所以给<span id="mysp"></span>的文本节点赋值的时候应该写成$('#mysp).text('mySpan');
+
+
+使用  '<span style="padding-left:40px;">—'+ data.name +'</span>' ; span标签的padding margin功能代替多个&nbsp;
+
+
+
+${param.x} 返回名为x 的 request参数。（可能有多个值）
+
+
+
+HTML5提供了新的语义元素来明确一个Web页面的不同部分。
+
+<header>：描述了文档的头部区域，于定义内容的介绍展示区域
+<nav>：定义导航链接的部分。
+<section>：定义文档中的节（section、区段）。比如章节、页眉、页脚或文档中的其他部分，section通常 包含了一组内容及其标题。
+<article>：定义独立的内容。
+<aside>：定义页面主区域内容之外的内容（比如侧边栏）。
+<figure>：标签规定独立的流内容（图像、图表、照片、代码等等）。
+<figcaption>：定义 <figure> 元素的标题。
+<footer>：述了文档的底部区域，一个页脚通常包含文档的作者，著作权信息，链接的使用条款，联系信息等。
+在一个网页中，这些新的语义标签元素位置如下图所示：
+
+https://blog.csdn.net/nongweiyilady/article/details/53885433 
+
+
+
+
+
+readonly 属性是一个布尔属性。
+
+readonly 属性规定输入字段是只读的。
+
+只读字段是不能修改的。不过，用户仍然可以使用 tab 键切换到该字段，还可以选中或拷贝其文本。
+
+readonly 属性可以防止用户对值进行修改，直到满足某些条件为止（比如选中了一个复选框）。然后，需要使用 JavaScript 消除 readonly 值，将输入字段切换到可编辑状态。
+<form action="demo_form.html">
+  Country: <input type="text" name="country" value="Norway" readonly><br>
+  <input type="submit" value="提交">
+</form>
+
+
+
+
+
