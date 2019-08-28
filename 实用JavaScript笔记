@@ -1,0 +1,138 @@
+使用eval方法将json字符串转换成json对象：
+
+ "{"type" : "creditor"}" 
+ code_type = eval("(" + code_type + ")"); 
+
+原因：eval本身的问题。 由于json是以{}的方式来开始以及结束的，在JS中，它会被当成一个语句块来处理，所以必须强制性的将它转换成一种表达式。
+
+加上圆括号的目的是迫使eval函数在处理JavaScript代码的时候强制将括号内的表达式(expression)转化为对象，而不是作为语句(statement)来执行。举一个例子，例如对象字面量{}，如若不加外层的括号，那么eval会将大括号识别为JavaScript代码块的开始和结束标记，那么{}将会被认为是执行了一句空语句。
+
+为什么要加括号
+原因：eval本身的问题。 由于json是以{}的方式来开始以及结束的，在JS中，它会被当成一个语句块来处理，所以必须强制性的将它转换成一种表达式。
+
+加上圆括号的目的是迫使eval函数在处理JavaScript代码的时候强制将括号内的表达式(expression)转化为对象，而不是作为语句(statement)来执行。举一个例子，例如对象字面量{}，如若不加外层的括号，那么eval会将大括号识别为JavaScript代码块的开始和结束标记，那么{}将会被认为是执行了一句空语句。
+eval(string)函数的本职功能是计算字符串的内容当做表达式来计算，并执行
+
+
+
+
+
+
+
+
+
+
+防止input取数变成科学计数法：
+
+用New Number()强转为数字   var gu = new Number($("#initialStockAmount").val());
+
+
+
+
+
+
+
+
+
+
+
+强制转型（转为boolean string number）的方法：
+
+// 强制转换为Boolean 用 !! 或者Boolean(x)
+	var bool = !! 'c';
+	console.log(typeof bool);  // boolean
+	Boolean('');//false
+	Boolean(null);//false
+	Boolean(0);//false
+	Boolean('hi');//true
+	Boolean(100);//true
+	Boolean(new Object());//rturn true 
+
+// 强制转换为Number 用 parseInt
+var numm = pareInt('1234');   
+
+// 强制转换为String 用  +
+var str = '' + 1234;
+console.log(typeof str); // string
+
+
+
+
+
+
+
+
+
+顶级页面的宽高：
+
+$(window.top).width()           
+$(window.top).height()
+
+
+
+
+
+
+
+
+遍历obj的属性值： a in b ：
+for (var attr in asset) {
+	console.info(attr + ":" + asset[attr]);
+}
+
+
+
+
+
+
+
+
+往数组里push对象这么写比较炫酷：
+var mogai = [];
+mogai.push({
+	id :  data[i].code,
+	text : data[i].name
+});
+
+
+
+
+
+
+
+
+
+
+js对象和jquery对象的互相转换：
+
+jquery -> js
+jquery对象是类数组对象，可以使用下标遍历的方式
+$obj[0]
+
+
+js -> jquery
+
+使用$()方法，传入js对象作为参数，可以包装成为一个jquery对象
+
+
+
+
+
+
+
+
+
+JQuery each方法跳出循环的方法
+$('#myForm').find('input  , select , textarea ').each(function(index , ele , obj){
+	return false;
+});
+不能用break,得用reutrn
+return false：将停止循环 (就像在普通的循环中使用 'break')。
+
+return true：跳至下一个循环(就像在普通的循环中使用'continue')。
+
+
+
+
+
+
