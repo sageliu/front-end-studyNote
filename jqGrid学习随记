@@ -1,0 +1,205 @@
+
+GET和POST两种基本请求方法的区别
+
+来自 <https://www.cnblogs.com/logsharing/p/8448446.html> 
+GET参数通过URL传递，POST放在Request body中。
+HTTP的底层是TCP/IP。所以GET和POST的底层也是TCP/IP，也就是说，GET/POST都是TCP链接。GET和POST能做的事情是一样一样的。你要给GET加上request body，给POST带上url参数，技术上是完全行的通的。 
+
+
+
+
+双表头对不齐：
+双标的宽度是默认shrinkToFit : false, //true:自适应界面，false：根据列设置的宽度展示  为flase的情况设置的
+
+
+
+
+
+
+jqGrid  setCell方法 参数：
+rowid,colname, data, class, properties, forceup
+横向合并单元格示例：
+$(gridName).setCell(1 , 'orgName' , '总计' , '' , {'style' : 'text-align: center;' ,  'colspan' : 4});
+$(gridName).setCell(1 , 'projectCode' ,'' , '' , {'style' : 'display: none'});
+纵向：
+$(gridName).setCell(1 , 'orgName' , '总计' , '' , {'style' : 'vertical-align :middle;' ,  'rowspan' : 4});
+$(gridName).setCell(1 , 'projectCode' ,'' , '' , {'style' : 'display: none'});
+
+
+
+
+
+
+
+原生jqGrid
+function jqGridInit(currType){
+	var gridName = '#' + currType + 'Grid';
+	$(gridName).jqGrid({
+		url: '/schedule/area',
+		mtype: 'get',
+		datatype : "local",
+		caption : '123',
+		shrinkToFit : true, //true:自适应界面，false：根据列设置的宽度展示
+		autowidth : false,
+		gridComplete : function() {
+			$(gridName).removeClass('ui-jqgrid-table-striped'); //去掉条纹间隔颜色
+			$(gridName).find('#1 td').addClass('totalColor'); //总计行颜色变灰
+		},
+		colNames : ['板块' , '期初风险敞口' , '当期回收本金' , '当期回收收益' , '当期回现合计' , '期末风险敞口' , '当期清收进度'],
+		colModel : [{
+			name : 'name',
+			width : 90,
+			align : "center",
+			classes : 'nameColor',
+		}, {
+			name : 'startRiskExposure',
+			width : 70,
+			align : "center",
+			formatter : function(val, obj, row, act) {
+				return val == null ? '' : globalUtil.formatNumber(val/10000, 2, true);
+			}
+		}, {
+			name : 'refundPrincipal',
+			width : 70,
+			align : "center",
+			formatter : function(val, obj, row, act) {
+				return val == null ? '' : globalUtil.formatNumber(val/10000, 2, true);
+			}
+		}, {
+			name : 'refundInterest',
+			width : 70,
+			align : "center",
+			formatter : function(val, obj, row, act) {
+				return val == null ? '' : globalUtil.formatNumber(val/10000, 2, true);
+			}
+		}, {
+			name : 'refundSum',
+			width : 70,
+			align : "center",
+			formatter : function(val, obj, row, act) {
+				return val == null ? '' : globalUtil.formatNumber(val/10000, 2, true);
+			}
+		}, {
+			name : 'endRiskExposure',
+			width : 70,
+			align : "center",
+			formatter : function(val, obj, row, act) {
+				return val == null ? '' : globalUtil.formatNumber(val/10000, 2, true);
+			}
+		}, {
+			name : 'refundPercent',
+			width : 70,
+			align : "center"
+		} ]
+	});
+}
+
+
+jqGrid的方法使用语法就是 $("#tableId").jqGrid({ /*属性*/ key1  : value1 , key2 : value2 });
+
+和javaScript的对象kv对规则一样，key只能是string  ，value可以是string number Boolean function {object}  [list]
+
+
+
+
+
+columnModel里面formatter的function参数：val值, row行
+formatter : function(val, obj, row, act) { ..  }
+
+
+
+
+
+columnModel 里面如果没有这一列，row可获得数据，getRowData方法获取不到
+formatter: function(val , obj ,row) 的row里面可以获取所有的network数据  
+$('#oGrid').jqGrid('getRowData');方法得到的只有column里面设置的字段
+
+
+
+获取一行的jquery对象，取rowId就行了    var row = $('#' + rowId);
+
+
+
+数字小数点，千分符格式化的两种方法：
+//无条件格式化场景
+formatter:'currency', 
+formatoptions:{decimalSeparator:".", thousandsSeparator: ",", defaultValue: ''}
+
+//有条件格式化场景
+formatter : function(val, obj, row, act) {
+	if (row.assetType == "BIZ00201") {
+			return "—";
+		} else {
+			return globalUtil.formatNumber(val, 2, true); //千分符展示
+		}
+	},
+unformat: function(val, options){
+		return globalUtil.formatNumber(val, 2, false);  
+	}
+
+
+
+
+	
+	获取选中的jqgrid行，
+	var param = $('#cGrid').jqGrid("getGridParam");
+				var ids = param["selarrrow"];
+	
+	
+	
+	
+	//设置编辑状态下focus哪个,id是行id
+	$('#addGrid').jqGrid("editRow",id, {
+			        keys: true,
+			        focusField: 4
+			    });
+			
+
+
+
+
+
+JSON是JavaScript的内置对象：
+JSON.parse()	用于将一个 JSON 字符串转换为 JavaScript 对象。   
+同样的功能：  eval('(' + js + ')');
+
+JSON.stringify()	用于将 JavaScript 值转换为 JSON 字符串。
+
+
+match() 方法可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。返回值是数组
+string.match(regexp)
+var str="The rain in SPAIN stays mainly in the plain"; 
+var n=str.match(/ain/gi);
+ain,AIN,ain,ain
+
+
+数组末尾增push 减pop  数组首部增unshift减shift
+
+
+typeof 在鉴别string和function时还是很好使的
+
+
+Math.abs()  求绝对值，好用
+
+有这个属性值且不为null
+ 'localStorage' in window && window.localStorage !== null;
+
+属性名 in 对象 操作符可以看对象有没有这个属性
+
+innerWidth() 方法返回第一个匹配元素的内部宽度。
+width() - 设置或返回元素的宽度
+height() - 设置或返回元素的高度
+innerHeight() - 返回元素的高度（包含 padding）
+outerWidth() - 返回元素的宽度（包含 padding 和 border）
+outerHeight() - 返回元素的高度（包含 padding 和 border）
+
+
+
+
+
+
+
+
+unformat : function(val, options) {
+									return val; //让上一次的值被选中
+								}
