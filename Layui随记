@@ -1,0 +1,61 @@
+			示例：
+			
+			//打开弹出层
+			var options = {
+				type : 2 ,//iframe层
+				title : '新增回现',
+				area : [ $(window.top).width() + 'px', $(window.top).height() - 20 + 'px' ],
+				content : '/asset/addRefund',
+				closeBtn : 1, //右上角点击关闭按钮样式 0/1/2
+				btn : [ '<ii class="fa fa-check"></i>保存', '<i class="fa fa-close"></i> 取消' ],
+				yes : function(index, layero) { //【保存】的回调
+					globalUtil.confirm("您确定保存当前新增的回现吗？", function() {
+						//获取弹出层页面的变量
+						var saveFunction = $(layero).find("iframe")[0].contentWindow.saveRefund;
+						//console.info(saveFunction);
+						saveFunction(function(){
+							globalUtil.layer.close(index);
+							selArray = [];
+							$('#refundGrid').trigger("reloadGrid");
+						});
+					}); 
+				},
+				btn1 : function(index, layero) { //【取消】的回调
+					$('#refundGrid').trigger("reloadGrid");
+					globalUtil.layer.close(index);
+				}
+			};
+			//开！
+			globalUtil.layer.open(options);
+
+//获取弹出层页面的变量
+var selestedIds = $(layero).find("iframe")[0].contentWindow.弹出层页面的全局变量或者方法;
+
+
+layui的render elem除了id也可以写js对象本身
+$('input:not(:disabled)[name="startDate"] , #overdueDateId , #extensionDateId').each(function(index , element){
+			laydate.render({
+			       elem: element,
+			       type:'date'
+			});
+		});
+		
+		
+		
+		
+
+layerui弹出层多按钮功能自动关闭，想避免的话在末尾加上return false;
+
+
+
+
+layui 时间框选择一闪就消失：
+layDate时间控件在页面高度不足时会出现一闪就关闭
+
+解决：加上属性 trigger: 'click'
+
+
+
+
+layui的日期选择工具，min  max的设置如果是字符型一定得准守'2019-01-01'的格式，‘-’隔开并且精确到日，否则就没效果
+
