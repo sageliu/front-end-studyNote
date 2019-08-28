@@ -1,0 +1,238 @@
+Vue只关注MVC架构中的View视图层，构建用户界面框架
+
+
+前端开发效率进程：
+原生JS代码-》jQuery类库-》前端模板引擎-》vue.js/angular.js/react.js等框架（能减少不必要的DOM操作，提高渲染效率，双向绑定的概念）
+Vue.js的诞生就是为了提高前端工程的开发效率而诞生的
+
+
+
+Vue的核心概念，是不再操作DOM元素，花更多精力去关心业务逻辑
+
+
+框架和库的区别：
+框架对项目的侵入性比较大，换框架得重构项目；
+库对项目的侵入性小，容易切换：从jQuery切换到zepto ;  从EJS->art-template
+
+MVC与MVVM
+MVC是整个项目的逻辑分层，model是数据的CURD，view是用户页面，controller是业务逻辑
+MVVM是前端视图层的概念，M数据，V视图，VM是他们中间的桥梁实现数据双向绑定
+
+
+
+//script引入vue.js文件
+
+//创建Vue实例
+var vm = new Vue({});
+
+el表示这个实例要控制的id为xxx的DOM元素及他的子孙元素
+
+data属性存放这个el中要用到的数据
+
+{{ msg }}差值表达式
+
+
+可以找到Vue代码和MVVM模型的分块儿对应，M对应那些代码，V对应哪些，VM对应哪些？
+
+network选择slow 3G慢网络可以看出一些渲染节奏
+
+v-cloak 能解决插值表达式闪烁的问题
+
+v-text可以相当于差值表达式，区别在于它没有插值表达式的闪烁问题，会覆盖元素内原本的文本
+
+插值表达式和v-text都会把data中的数据当做纯文本输出到页面中，不会解析字符串中的html标签
+
+想要能解析为html标签，使用v-html指令
+
+v-bind用于绑定属性的指令，将html元素中的属性和data中的数据绑定, v-bind:title="" 引号中的内容会被当做js表达式去解析，所以可以在引号中写合法的JS表达式   v-bind:title="myTitle + '123'"
+v-bind:  = :  
+
+
+
+v-on用于绑定事件，指定事件处理程序，将元素的事件和Vue实例中的方法绑定。
+v-on:  = @
+
+
+在Vue实例中想要获取数据或者调用方法，必须使用this,   this.msg    this.handle   this表示实例对象
+
+对象中的函数： lang(){}  是ES6新的函数写法 ， 可替代lang : function(){}
+
+
+
+vue实例会监听data中数据的改变，只要数据一发生改变会立刻同步到页面中
+
+
+	
+要注意vue实例里面的this可能指向的是window对象，而并不不是本Vue实例对象，比如写在setInterval函数里面是就指向window
+
+
+
+
+事件修饰符
+.stop   停止冒泡  (默认开启事件冒泡的：里面的元素事件发生以后，包裹在外面的元素同名事件也被触发)
+.prevent  阻止默认行为  例如a链接点击后默认行为是跳转到href的地址
+.capture   捕获机制实现事件     先执行外层事件，在执行里层事件
+.self  当点到自己元素本身的时候才触发事件   （阻止自己被冒泡，不会管别的元素被冒泡）
+.once  只触发一次事件处理函数  @click.prevent.once   阻止默认事件也只发生一次
+
+
+
+@click.stop="btnHandler"   可连续加事件描述符 @click.stop.prevent
+
+v-bind只能将M中的数据绑定到V,不能讲V绑定到M
+v-model可实现表单元素和model中的数据的双向绑定M->  V    V->M  而页面元素里面能改变数据的有表单元素，例如input。v-model只能用于表单元素。
+
+
+v-for循环中的key属性用于唯一标志这一条dom， 写法是v-bind:key=""   ，对应的值是一条数据中唯一标识的number或string
+
+
+
+@click="add(参数)"加了小括号就能穿参数了
+
+vue-devtools   vue安装在chrome的调试工具  F12的时候 看起来很方便
+
+
+
+过滤器
+只有 :v-bind   绑定的属性  和  {{}} 插值表达式可以使用过滤器 ，  过滤器知识在输出前做的最后一道过滤操作，不会改变数据
+
+
+定义一个全局的过滤器
+ Vue.filter('dateFormat' , function(dateStr){
+            var date = new Date(dateStr);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return `${y}-${m}-${d}`;
+        });
+
+定义一个该vue实例私有的过滤器
+ var vm2 = new Vue({
+            el : '#app2',
+            data(){
+                msg : new Date()
+            },
+            methods:{},
+            filters:{
+                
+            }
+        });
+
+
+
+常用按键时间修饰符：.enter    .up  .down   .left  .right   .delete  .esc  .space
+@keyup.enter="addTag" 当键盘的回车键抬起来的时候执行函数addTag
+
+
+自定义键值修饰符,将键盘按键的code码值定义一个名字
+Vue.config.keyCodes.名称 = 按键code;
+Vue.config.keyCodes.f2 = 113;
+
+
+
+定义自定义指令,第一个参数是指令名称，名称定义的时候不用加v-  调用新指令的时候需要加v-
+Vue.directive()
+
+
+一个元素只有插入到DOM去之后才能获取焦点
+
+自定义指令的钩子函数，js行为建议写在inserted里面，样式写在bind里面。
+
+自定义指令命名建议全部小写  fontweight  ， 因为定义的时候如果定义为驼峰的大写，html里面都会解析为小写，所以会不一致，所以自定义指令名称全都小写！！！
+
+
+Vue实例的生命周期函数（钩子函数）
+	1. new Vue();
+	2. 钩beforeCreate()第一个钩子函数，  这时data()和methods（）里的数据和函数都没初始化
+	3. created第二个钩子函数，函数中data和methods已经被初始化好了，是最早可以使用数据和方法的钩子函数
+	4. beforeMount()挂载之前。此时el绑定的元素的模板已经编译完成，但是尚未挂载页面上，页面还是旧的模板字符串，比如插值表达式在页面中还是{{msg}}
+	5. mounted()模板挂载完毕，页面被完全渲染，到此时为止是vue实例创建的最后一个函数。
+
+	6. beforeUpate() 当data中的数据改变时触发，此时数据是最新的，但是页面中显示的数据还是旧的，没有更新
+	7. updated（） 此时页面上显示的数据被同步为最新的。
+
+
+	8. beforeDestroy() 此时实例中的data methods filters direstives都还能用
+
+destroyed() 此时实例中的data methods filters direstives被真实的销毁了不能使用了
+
+
+
+
+
+vue中实现ajax
+常用的两个第三方包有axios   、 vue-resource
+
+注意vue-resource的js包依赖于vue。js得在他后面引入。详细的文档https://github.com/pagekit/vue-resource/blob/develop/docs/http.md
+
+
+
+
+
+
+
+
+模块化：从代码逻辑角度拆分代码（node）,保证每个模块的职能单一
+ 
+组件化：从UI界面角度拆分代码（components）
+
+
+
+定义全局组件
+ Vue.component('mycom4' , {
+            template : '#tmp'
+        })
+
+也可定义私有组件
+
+
+
+组件的占位符， :is绑定的是组件名称，注意串字符串要加单引号，传变量不用加
+<component :is="'login'"></component>
+
+
+再次声明一遍，在html里面写的属性呢一定不要用驼峰，都用小写！！！！！！
+
+
+
+父组件把自己的方法传递给子组件：使用事件绑定机制
+子组件自定义一个事件，绑定事件，  v-on:func="show"
+
+
+
+
+父组件给子组件传值，子组件要自定义属性并使用v-bind：parentMsg=""绑定，并在组件模板对象内部定义props: ['parentMsg']属性
+父组件给子组件传函数，组组件要自定义事件并使用v-on:funce=""绑定，并在组件模板内部调用this.$emit('funce')调用函数
+子组件给父组件传值，子组件调用父组件的方法，并传递参数，父组件的方法接收参数并保存。
+
+localStorage的存和取,里面只存字符串儿
+localStorage.getItem('ctms');
+localStorage.setItem('ctms' ， JSON.stringify(list));
+
+
+localStorage存储的是key-value键值对形式，所以名字得写对'ctms'是自定义的key
+去Application看
+
+
+
+
+获取元素，在html元素上写上属性ref=""   然后在实例里面可以方便获取this.$refs对象查看所有的引用元素，也可直接在F12的console里面敲vm查看$refs属性
+
+
+
+
+vue-router路由
+
+区分后端路由和前端路由：
+1. **后端路由：**对于普通的网站，所有的超链接都是URL地址，所有的URL地址都对应服务器上对应的资源；
+
+2. **前端路由：**对于单页面应用程序来说，主要通过URL中的hash(#号)来实现不同页面之间的切换，同时，hash有一个特点：HTTP请求中不会包含hash相关的内容；所以，单页面程序中的页面跳转主要用hash实现；
+
+3. 在单页面应用程序中，这种通过hash改变来切换页面的方式，称作前端路由（区别于后端路由）；
+
+
+<a>标签的href="#" 开头也不是http请求，而是锚点，是前端路由
+
+如果写在全局script里面就得写在vue.js后面
+<script src="./lib/vue-router-3.0.1.js"></script>
+
