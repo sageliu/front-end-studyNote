@@ -1,0 +1,133 @@
+Jquery validate插件常用方法就两个：
+	1. $('#myForm').validate({  /*验证属性*/  });     //设置待验证表单的验证规则
+	2. $('#myForm').valid();     //无参数，对该表单执行验证，返回结果为true/false
+
+设置表单验证示例：
+
+$("#myForm").validate({
+	debug :true,  //default false 为true时开启debug模式	
+	submitHandler :function(form){ //当表格.valid()返回true时回调这个函数，执行ajax提交。form是函数的参数，类型是js对象
+		$(form).ajaxSubmit();
+	},
+	invalidHandler: function(event, validator) {
+    	//验证不通过时触发，提示多少不通过的
+	    var errors = validator.numberOfInvalids();
+	    if (errors) {
+	      var message = errors == 1
+	        ? 'You missed 1 field. It has been highlighted'
+	        : 'You missed ' + errors + ' fields. They have been highlighted';
+	      $("div.error span").html(message);
+	      $("div.error").show();
+	    } else {
+	      $("div.error").hide();
+	    }
+  	},
+          ignore: ".ignore",  //验证时忽略class为ignore的字段支持jquery选择器 #namex id选择
+          rules: {   //编辑规则，根据表单各个input textarea select 的name设置
+	      advanceName: {
+	      required: true
+	      min: {
+	        //当bonus元素是选中状态时，advanceName元素最小值15的验证生效
+	        param: 15,
+	        depends: function(element) {
+	          return $("#bonus").is(":checked");
+	        }
+	      }
+	    }
+         },
+         messages: { //提示信息
+	    name: "Please specify your name",
+	    email: {
+	      required: "We need your email address to contact you",
+	      email: "Your email address must be in the format of name@domain.com"
+	    }
+        },
+         errorClass: "invalid", //设置验证不通过的提示信息的class
+         errorElement: "em", //错误提示信息设置为斜体
+         validClass: "success",
+         wrapper: "li", //把错误提示标签用li标签包裹	
+});
+
+
+optional(element)    表单控件的值不为空时才触发验证，如果值为空也要触发则移除this.optional(element)
+
+默认设置
+$.validator.setDefaults({}); 里面  validate（）；能写的这里都能写
+
+默认的message提示：
+$.extend($.validator.messages, {
+    required: "这是必填字段",
+    remote: "请修正此字段",
+    email: "请输入有效的电子邮件地址",
+    url: "请输入有效的网址",
+    date: "请输入有效的日期",
+    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
+    number: "请输入有效的数字",
+    digits: "只能输入数字",
+    creditcard: "请输入有效的信用卡号码",
+    equalTo: "你的输入不相同",
+    extension: "请输入有效的后缀",
+    maxlength: $.validator.format("最多可以输入 {0} 个字符"),
+    minlength: $.validator.format("最少要输入 {0} 个字符"),
+    rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+    range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
+    max: $.validator.format("请输入不大于 {0} 的数值"),
+    min: $.validator.format("请输入不小于 {0} 的数值")
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+jQuery validator addMethod 动态提示具体信息
+$.validator.addMethod('PD_password', function (value, element) {
+    var len = value.length;
+    if(len<6){
+        $(element).data('error-msg','长度不能少于6位');
+        return false;
+    }
+    if(len>15){
+        $(element).data('error-msg','长度不能大于15位');
+        return false;
+    }
+    return true;
+}, function(params, element) {
+    return $(element).data('error-msg');
+});
+
+
+
+
+required接受function
+prinMortPledgeRate : { // 本金抵质押率
+			required : function(element) {
+				var a = $("select[name='collateralMainType']").val();
+				var b = $("select[name='pledgeMainType']").val();
+				return a != 'BIZ01403'  || b != 'BIZ01503';
+			}
+		},
+		
+		
+JQuery validate 插件在验证/校验 表单的时候，是不校验带有readonly，disabled,：reset（type= reset）,：submit，：image 等标签的，validation默认不会对Hidden元素进行验证的
+
+在做JQuery validate 调试的时候，若果进不去里面的debugger，那就在外面打断点，然后逐步F11进去。
+debugger;
+	if($('#validateRange').valid()){
+		return true;
+	}
+	
+	
+	
+	
+$("#validateRange").validate()定义规则一定要在#validateRange的html写出来之后，不然就rule捕捉不到
+
+
